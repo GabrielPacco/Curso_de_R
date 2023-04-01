@@ -1,0 +1,113 @@
+---
+title: "Probabilidad Clásica y probabilidad condicional"
+output: html_notebook
+---
+
+### Solucion teorica
+
+**$A$**: la suma de los dados es igual a **8**
+
+\[ A = {(6,6), (2,6) (3,5) (5,3) (4,4)}]\]
+
+\[
+P(A)=5/36=0,1388889
+\]
+
+### Simulación
+
+```{r}
+
+n = 50
+xs = numeric(n)
+#SIMULACION
+for (i in 1:n){
+  #Realiza el lanzamiento de los dados
+  trial = sample(1:6,2, replace = TRUE)
+  #La suma de los dados es igual a 8
+  if (sum(trial) == 8) xs[i]=1 else xs[i]=0
+}
+# PROMEDIO --> PROBABILIDAD
+mean(xs)
+```
+por medio del siguiente grafico se muestra la evolucion de **$P(A)$**
+```{r}
+
+    # graficos de media ergódica
+plot(1:n, cumsum(xs)/1:n, col="red", type = '1', xlab = "numero de lanzamientos", ylab = "probabilidad", las=1)
+abline(h=5/36, col = "blue", ldw=1.5)
+
+
+```
+##Lnza 5 monedas una sola vez y son honestas
+```{r}
+
+
+```
+
+
+## Ejemplo: Problema de los cumpleaños
+> Supoga que un salón en el area de ingenierias de la UNSA hay $n$ alumnos.
+- Demuestre que la probabilidad 
+
+```{r}
+# Factorial
+n = 50
+px=numeric()
+for(i in 1:n){
+aux=lfactorial(365) - lfactorial(365-i)-i*log(365)
+px[i] = 1 - exp(aux)
+}
+plot(1:n,px,col="red", las=1, ylab = "probabilidad", pch=19)
+abline(h=1/2, col="blue")
+cbind(1:n,round(px,3))
+```
+Grafica para las probabilidades
+
+```{r}
+
+plot(1:n,px, type = "1", las = 1, xlab = "numero de personas", ylab = "probabilidad", col = "red")
+abline(h=1/2)
+```
+## Ejercicio
+
+
+## Solución
+
+```{r}
+
+n = 500
+xs = numeric(n)
+#SIMULACION
+for (i in 1:n){
+  #Realiza el lanzamiento de los dados
+  trial = sample(1:13,3, replace = TRUE)
+  #La suma de las cartas es igual 15
+  if (sum(trial) == 15) xs[i]=1 else xs[i]=0
+}
+# PROMEDIO --> PROBABILIDAD
+mean(xs)
+
+```
+```{r}
+plot(1:n, cumsum(xs)/1:n, col="red", type = '1', xlab = "numero de simulaciones", ylab = "probabilidad", las=1)
+abline(h=5/36, col = "blue", ldw=1.5)
+```
+
+```{r}
+
+n = 5
+xs = numeric(n)
+#SIMULACION
+for (i in 1:n){
+  #Realiza el lanzamiento de los dados
+  trial = sample(1:2,2, replace = TRUE)
+  #La suma de los dados es igual a 8
+  if (trial[i] == 4) xs[i]=1 else xs[i]=0
+}
+# PROMEDIO --> PROBABILIDAD
+mean(xs)
+```
+
+
+
+

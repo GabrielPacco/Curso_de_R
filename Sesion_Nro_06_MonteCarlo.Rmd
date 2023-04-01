@@ -1,0 +1,193 @@
+---
+title: "Introduccion al metodo Monte Carlo"
+output:
+  html_document:
+    df_print: paged
+---
+
+El **metodo Monte Carlo (MC)** es una tecnica que utiliza  números aleatorios para resolver (de forma aproximada) problemas matemáticos, fisicos, estadisticos, quimicos y de otras areas en que no se conoce una solución analítica.
+
+La idea es calcular de forma analitica
+\begin{align}
+\theta = \int_{0}^{1}h(x)dx
+\end{align}
+Sin embargo existen situaciones no posible obtener el resultado anterior. Asi para obtener la integral anterior se puede considerar 2 metodos 
+
+- Métodos de integración numérica  
+- Metodos de simulacion estocastica (metodo Monte Carlo)
+
+Calcular una integral puede ser visto como calcular el valor esperado o esperanza de la función $h(X)$. 
+El metodo Monte Carlo proporciona un estimador para $\theta$, que sera denotado por $\theta_{MC}$. El estimador MC depende del contexto del problema a resolver.
+
+Para tener una mejor visión, esto suponga que se desea obtener el valor numerica de $\theta$ y que no sea posible obtener el valor de $\theta$ de forma analitica, entonces como el rango donde se calcula la integración esta en $0\leq x\leq 1$, entonces se puede considerar que $X$ sigue una distribucion uniforme en $[0,1]$, $X \sim U([0,1])$, asi su funcion de densidad de probabilidad (fdp) es dada por 
+\begin{align}
+f(x) = 
+\begin{cases}
+1, \quad \mbox{si} \ \ 0\leq x \leq 1\\
+0, \quad \mbox{cc}
+\end{cases}
+\end{align}
+Luego, el valor  de $\theta$ se reescribiria de la forma
+\[
+\theta = \int_{0}^{1}h(x)dx = \int_{0}^{1}h(x)\cdot 1 dx = E[h(x)]
+\]
+Notese que el valor esperado de $h(x)$ es igual $\theta$ y la varianza es $\sigma^2$,  
+\begin{align}
+\theta &= E[h(x)]\\
+\sigma^2 &= Var[h(x)]
+\end{align}
+La idea es aproximar $\theta$ por medio del metodo Monte Carlo, usando el estimador $\theta_{MC}$.
+
+## METODO MONTE CARLO SIMPLE (CRUDE MONTE CARLO)
+La idea de este metodo es generar una muestra aleatoria de tamaño $n$ de la distribucion $f_{X}(x)$ (una fdp), asi 
+\[
+X_{1}, X_{2}, \ldots, X_{n}. \quad X_{i} \sim f_{X}(x)
+\]
+luego el estimador MC es dado por 
+\[
+\hat{\theta}_{MC} =\frac{1}{n} \sum_{i=1}^{n} h(x_{i})=\bar{h}
+\]
+
+## Ejemplo 1
+Calcular
+\begin{align}
+\theta=E[h(X)] = E[\{\cos(50X)+\sin(10X)\}^2], \quad X \sim U([0,1])
+\end{align}
+**Solución teórica**  
+\begin{align}
+E[h(X)] = \int_{0}^{1} \{\cos(50X)+\sin(10X)\}^2dx
+\end{align}
+No se puede obtener el valor de la integral de forma analitica
+
+##### Solucion: Integracion numerica
+Usando un metodo de integracion numerica para obtener el valor de $\theta$ se tiene que primero crear la funcion.
+```{r}
+# la funcion h(x) esta definida en [0,1]
+hx = function(x){
+  aux=((cos(50*x) + sin(10*x))^2)
+  return(aux)
+}
+hx(0.6)
+hx(56.9)
+```
+Luego el valor de $theta$ por integracion numerica es dado por
+```{r}
+?integrate
+integrate(hx,0,1)
+```
+##### Solucion: metodo Monte Carlo (crude MC)
+\[
+\theta_{MC}=\bar{h}_n = \frac{1}{n}\sum_{i=1}^{n}h(x_i)
+\]
+Notese que  
+\[
+{h}(X) = \{\cos(50X)+\sin(10X)\}^2
+\]
+La estimacion de $E[\{\cos(50X)+\sin(10X)\}^2]$ por el metodo Monte Carlo simple es dado por
+```{r}
+n = 10000
+# generando las variables aleatotorias
+x1 = runif(n,0,1)
+# evaluando en la funcion h
+haux = hx(x1)
+# promedio  para cada valor de "n"
+hbarn=cumsum(haux)/1:n
+# grafico
+plot(1:n, hbarn, type="l",lwd=2,las=1,xlab = n, ylab = "E[h(x)]", ylim = c(0,2))
+abline(h=0.9655113, col=2, lwd=2)
+```
+## Ejemplo 2
+Calcular
+\begin{align}
+\theta=E[h(X)] = E[\{\cos(50X)+\sin(10X)\}^2], \quad X \sim U([0,3])
+\end{align}
+**Solución teórica**  
+\begin{align}
+\theta= E[h(X)] = \int_{0}^{3} \{\cos(50X)+\sin(10X)\}^2\cdot \frac{(3-0)}{(3-0)}dx = 
+(3-0)\int_{0}^{3} \{\cos(50X)+\sin(10X)\}^2\cdot \frac{1}{(3-0)}dx
+\end{align}
+No se puede obtener el valor de la integral de forma analítica
+##### Solucion: Integracion numerica
+```{r}
+integrate(hx,0,3)
+```
+##### Solucion: metodo Monte Carlo (crude MC)
+```{r}
+n = 10000
+a=0.0 ;b=3.0
+# generando las variables aleatotorias
+x1 = runif(n, a, b)
+# evaluando en la funcion h
+haux = hx(x1)
+# promedio  para cada valor de "n"
+hbarn=cumsum(haux)/1:n
+# grafico
+plot(1:n, (b-a)*hbarn, type="l",lwd=2,las=1,xlab = n, ylab = "E[h(x)]", ylim = c(0,4))
+abline(h=3.024617, col=2, lwd=2)
+```
+
+
+## Ejemplo 
+Encuentre el valor esperado
+\[
+E[0.5e^{-|X|}], \quad X \sim N(2,2^2)
+\]
+usando el metodo Monte Carlo. 
+
+Se tiene que 
+\begin{align}
+E[h(X)] = \int_{-\infty}^{+\infty}0.5e^{-|X|} \frac{1}{\sqrt{2 \pi}} e^{-\frac{1}{2}\frac{(x-2)^2}{2^2}}dx
+\end{align}
+De forma numerica
+```{r}
+f2 = function(x){
+  aux=(0.5*exp(-abs(x)))*dnorm(x,2,2)
+  return(aux)
+}
+```
+por metodos numericos
+```{r}
+integrate(f2,-Inf,Inf)
+```
+Por el metodo monte carlo
+```{r}
+h2 = function(x){
+  aux=0.5*exp(-abs(x))
+  return(aux)
+}
+```
+
+```{r}
+n = 10000
+# generando las variables aleatorias
+x2 = rnorm(n,2,2)
+# evaluando en la funcion h
+haux = h2(x2)
+# promedio para nada "1,2,3,...,n"
+hbarn=cumsum(haux)/1:n
+# grafico
+plot(1:n, hbarn, type="l",lwd=2,las=1,xlab = "n", ylab = "E[h(x)]", ylim = c(0,0.2))
+abline(h=0.1161786, col=2, lwd=2)
+```
+## Completar la wada -------->
+
+
+### Ejemplo 2
+```{r}
+# la funcion h(x) esta definida en [2,4]
+hx = exp(-x){
+  aux=((cos(50*x) + sin(10*x))^2)
+  return(aux)
+}
+hx(0.6)
+hx(56.9)
+```
+
+
+```{r}
+
+```
+
+
+
+

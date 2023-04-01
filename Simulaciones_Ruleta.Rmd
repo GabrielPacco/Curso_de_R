@@ -1,0 +1,23 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+n = 10000
+xs = numeric(n)
+ruleta = 1:38
+for (i in 1:n){
+  xs[i] = if (sample(ruleta,1)<=18) 2 else -2
+}
+mean(xs)
+var(xs)
+```
+
+```{r}
+# numero de simulaciones
+plot(1:n, cumsum(xs)/1:n, type="l", lwd=2, col="red", las=1, ylab="probabilidad", 
+     xlab="simulaciones")
+abline(h=-4/38, col="blue", lwd=2)
+```
+

@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+> Ejemplo 1  
+Los coeficientes de la ecuacion cuadratica 
+\[ 
+x^2+bx+c=0
+\]
+son determinados por lanzar un dado 2 veces, en que el 1er resultado es para el coeficiente $b$ y el segundo para $c$.  
+Encuentre la probabilidad que la ecuacion tenga raices reales
+XXXXXXX
+n=100
+ind=numeric()
+for( i in 1:n){
+b=sample(1:6,1)
+c=sample(1:6,1)
+if(b^2 - 4*c >=0) ind[i]=1 else ind[i]=0 
+}
+pa_mc=cumsum(ind)/1:n
+plot(1:n, pa_mc, type="l",lwd=2,las=1,xlab = "n", ylab = "P(A)") 
+abline(h=19/36, col=2, lwd=2)
+
+```{r}
+n = 100
+# variable indicadora
+ind=numeric()
+# c1 conjunto A es dado por 
+# (a,b) tg b^2 - 4 ac <= 0 
+for (i in 1:n){
+  c = sample(1:6,1)
+}
+```
+
+
+
+```{r}
+n=10000
+i=0
+ind=numeric()
+for(i in i:n){
+x=runif(1,0,1)
+y=runif(1,0,1)
+if(x^2 + y^2 <= 1) ind[i]=1 else ind[i]=0
+}
+
+pi_mc=cumsum(ind)/1:n
+plot(1:n, pi_mc, type = "l", lwd=2, las=1, xlab= "n", ylab = "Estimacion del pi")
+abline(h=pi, col = 2, lwd = 2)
+```
+> Ejemplo 2  
+Un numero es seleccionado aleatoriamente del conjunto $\{ 1, 2,... ,1000\}$. Calcule la probabilidadque  
+ a) sea divisible por 3 pero no por 5. **R**.  267/1000
+ b) No sea divisible por 3 ni por 5
+
+
+```{r}
+x = sample(1:1000)
+if(x%%3 & x )
+```
+

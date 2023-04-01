@@ -1,0 +1,42 @@
+---
+title: "Lab_03"
+author: "Gabriel Pacco"
+date: '2022-05-06'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+n = 50
+# 
+iter=0
+xs=numeric(n)
+while (iter < n) {
+# lanzar los dos dados
+trial = sample(1:6, 2, replace=TRUE)
+  if (sum(trial) == 7) { 
+      exito = if(trial[1] == 2) 1 else 0
+  iter = iter + 1
+  xs[iter] = exito } 
+}
+# probabilidad aproximada
+mean(xs)
+```
+
+```{r}
+plot(1:n, cumsum(xs)/1:n, type="l", lwd=2, col="red", las=1, ylab="probabilidad", 
+     xlab="simulaciones")
+abline(h=1/6, col="blue", lwd=2)
+```
+
+
+**Simulación**
+# Solución Moisés Casaverde
+```{r}
+
+```
+

@@ -1,0 +1,74 @@
+---
+title: "Laboratorio_B"
+author: "Gabriel Pacco"
+date: '2022-05-07'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+Se lanza 5 monedas una sola vez y considerando que las monedas son honestas.
+a) Calcule la probabilidad de obtener el patron $CC$ en las dos primeras monedas
+dado que el número total de caras obtenidas es igual a 4.
+
+```{r}
+# numero de simulaciones
+n = 1000
+iter = 0
+bool = 0
+#
+xs = numeric(n)
+while (iter < n){
+  trial = sample(1:2, 5, replace = TRUE)
+
+  if (sum(trial) == 1) {
+    exito = if(trial[1]==1 & trial[2] == 1 )
+    iter = iter+1
+    xs[iter] = exito
+  }
+}
+```
+
+
+```{r}
+# numero de simulaciones
+plot(1:n, cumsum(xs)/1:n, type="l", lwd=2, col="red", las=1, ylab="probabilidad", 
+     xlab="simulaciones")
+abline(h=1/6, col="blue", lwd=2)
+```
+
+
+
+```{r}
+# numero de simulaciones
+n = 1000
+iter = 0
+#
+xs = numeric(n)
+while (iter < n)
+  trial = sample(1:2, 5, replace = TRUE)
+  if (sum(trial) == 34 ) {
+    exito = if(trial[1]=trial[2] == )
+  }
+
+
+```
+
+```{r}
+# numero de simulaciones
+n = 1000
+iter = 0
+#
+xs = numeric(n)
+while (iter < n)
+  trial = sample(1:2, 5, replace = TRUE)
+  if (sum(trial) == 34 ) {
+    exito = if(trial[1]=trial[2] == )
+  }
+
+
+```
+
